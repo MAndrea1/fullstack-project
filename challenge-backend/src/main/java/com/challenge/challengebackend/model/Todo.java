@@ -16,6 +16,10 @@ public class Todo {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public Long getId() {
+        return id;
+    }
+
     public String getTitle() {
         return title;
     }
