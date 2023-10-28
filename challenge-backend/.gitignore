@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### env ###
+application.data.properties
+application.env.properties

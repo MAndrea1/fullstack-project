@@ -1,6 +1,5 @@
 package com.challenge.challengebackend.controller;
 
-import com.challenge.challengebackend.model.Category;
 import com.challenge.challengebackend.model.Todo;
 import com.challenge.challengebackend.model.dto.TodoDTO;
 import com.challenge.challengebackend.service.TodoService;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 public class TodoController {
 
     @Autowired
