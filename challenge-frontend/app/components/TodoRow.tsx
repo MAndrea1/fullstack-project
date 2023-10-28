@@ -1,6 +1,8 @@
 import { Category, Todo } from '@/typings';
 import React, { useState } from 'react'
-const basetodosUrl = process.env.NEXT_PUBLIC_BASE_TODOS_URL as string;
+import { getEndpoint } from "@/config-endpoints";
+
+const { basetodosUrl } = getEndpoint();
 
 type todo = {
   todo: Todo
