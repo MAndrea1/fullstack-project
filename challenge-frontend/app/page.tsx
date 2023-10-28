@@ -2,14 +2,10 @@
 import { useEffect, useState } from "react"
 import { TodoRow } from "./components/TodoRow";
 import { Category, Todo } from "@/typings";
+import { TodoRowNew } from "./components/TodoRowNew";
 const todosUrl = process.env.NEXT_PUBLIC_TODOS_URL as string;
 const todosByCat = process.env.NEXT_PUBLIC_TODOS_BY_CAT_URL as string;
 const todosCat = process.env.NEXT_PUBLIC_CAT_URL as string;
-const todosDelete = process.env.NEXT_PUBLIC_DELETE_URL as string;
-
-type ParentComponentProps = {
-  deleteUser: (id: number) => Promise<void>;
-}
 
 export default function Home() {
   const [ todos, setTodos ] = useState<Todo[]>([])
@@ -33,27 +29,6 @@ export default function Home() {
     if (dataCategories?.length > 0) {
       setCategories(dataCategories)
     }
-  }
-
-  const deleteUser = async(id: number) => {
-    const requestOptions = {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    };
-    try {
-      const response = await fetch(todosDelete+id, requestOptions);
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-    // loadData()
   }
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -95,9 +70,10 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
+            {categories && addNewMode ? <TodoRowNew categories={categories} setAddNewMode={setAddNewMode} loadData={loadData}/> : ""}
             {
-              todos?.map((todo) => {
-                return <TodoRow key={todo.id} todo={todo} categories={categories} deleteUser={deleteUser}/>
+              todos?.reverse().map((todo) => {
+                return <TodoRow key={todo.id} todo={todo} categories={categories}/>
               })
             }
           </tbody>

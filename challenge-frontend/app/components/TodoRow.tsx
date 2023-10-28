@@ -6,21 +6,18 @@ const todosDelete = process.env.NEXT_PUBLIC_DELETE_URL as string;
 type todo = {
   todo: Todo
   categories: Category[]
-  deleteUser: (id: number) => Promise<void>;
 }
 
-export const TodoRow = ({todo, categories, deleteUser}: todo ) => {
+export const TodoRow = ({todo, categories}: todo ) => {
   const [ currentContent, setCurrentContent ] = useState<Todo>(todo)
   const [ newContent, setNewContent ] = useState<Todo>(todo)
-  const [ isChecked, setIsChecked ] = useState(newContent.completed);
   const [ editMode, setEditMode ] = useState(false)
- 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(e.target.checked);
-    if (editMode) {
-      setNewContent({...newContent, [e.target.name]: e.target.checked})
-    } else {
+  const [ isDeleted, setIsDeleted ] = useState(false)
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewContent({...newContent, [e.target.name]: e.target.checked})
+    if (!editMode) {
+      handleSave(e.target.checked)
     }
   };
 
@@ -34,16 +31,14 @@ export const TodoRow = ({todo, categories, deleteUser}: todo ) => {
     setNewContent({...newContent, [e.target.name]: e.target.value})
   }
 
-  const handleSave = async() => {
-    if (!editMode) { return }
+  const handleSave = async(checked: boolean | null) => {
     const newValues = {
       "id": newContent.id,
       "title": newContent.title,
       "content": newContent.content,
-      "completed": newContent.completed,
+      "completed": checked===null ? newContent.completed : checked,
       "categoryId": newContent.category === undefined ? newContent.category : newContent.category.id
     }
-    
     const requestOptions = {
       method: 'PUT',
       headers: {
@@ -67,11 +62,30 @@ export const TodoRow = ({todo, categories, deleteUser}: todo ) => {
     setEditMode(false)
   }
 
+  const deleteUser = async(id: number) => {
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    };
+    try {
+      const response = await fetch(todosDelete+id, requestOptions);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+    setIsDeleted(true)
+  }
+
   return (
-    <>
+    <tr className={`${isDeleted ? 'fade-out' : ''} ${isDeleted ? 'hidden' : ''}`}>
     {editMode
     ?  
-    <tr>
+    <>
       <td>
         <input
             name="title"
@@ -111,20 +125,21 @@ export const TodoRow = ({todo, categories, deleteUser}: todo ) => {
       </td>
       <td className='w-fit'>
         <div className='flex flex-col space-y-1 md:flex-row md:space-y-0 md:space-x-1 w-fit'>
-          <button onClick={handleSave} className="btn btn-sm btn-outline btn-info">Save</button>
+          <button onClick={() => handleSave(null)} className="btn btn-sm btn-outline btn-info">Save</button>
           <button onClick={() => {setEditMode(false), setNewContent(currentContent)}} className="btn btn-sm btn-outline btn-error">Discard</button>
         </div>
       </td>
-    </tr>
+    </>
     : 
-    <tr>
+    <>
       <td><p className='font-bold'>{currentContent.title}</p></td>
       <td><p>{currentContent.content}</p></td>
       <td><p>{currentContent.category.name}</p></td>
       <td>
         <input 
+          name="completed"
           type="checkbox" 
-          checked={currentContent.completed} 
+          checked={newContent.completed} 
           onChange={handleCheckboxChange}
           className="checkbox ml-4"/>
       </td>
@@ -134,8 +149,8 @@ export const TodoRow = ({todo, categories, deleteUser}: todo ) => {
           <button onClick={() => deleteUser(currentContent.id)} className="btn btn-sm btn-outline btn-error">Delete</button>
         </div>
       </td>
-      </tr>
+      </>
     }
-    </>
+    </tr>
   )
 }
