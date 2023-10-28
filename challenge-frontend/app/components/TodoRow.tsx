@@ -1,7 +1,6 @@
 import { Category, Todo } from '@/typings';
 import React, { useState } from 'react'
-const putUrl = process.env.NEXT_PUBLIC_PUT_URL as string;
-const todosDelete = process.env.NEXT_PUBLIC_DELETE_URL as string;
+const basetodosUrl = process.env.NEXT_PUBLIC_BASE_TODOS_URL as string;
 
 type todo = {
   todo: Todo
@@ -13,6 +12,9 @@ export const TodoRow = ({todo, categories}: todo ) => {
   const [ newContent, setNewContent ] = useState<Todo>(todo)
   const [ editMode, setEditMode ] = useState(false)
   const [ isDeleted, setIsDeleted ] = useState(false)
+
+  const todosPutUrl = basetodosUrl + "todo/" + todo.id 
+  const todosDeleteUrl = basetodosUrl + "todo/" + todo.id 
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewContent({...newContent, [e.target.name]: e.target.checked})
@@ -48,7 +50,7 @@ export const TodoRow = ({todo, categories}: todo ) => {
     };
 
     try {
-      const response = await fetch(putUrl+todo.id, requestOptions);
+      const response = await fetch(todosPutUrl, requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -70,7 +72,7 @@ export const TodoRow = ({todo, categories}: todo ) => {
       }
     };
     try {
-      const response = await fetch(todosDelete+id, requestOptions);
+      const response = await fetch(todosDeleteUrl, requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');

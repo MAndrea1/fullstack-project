@@ -1,6 +1,6 @@
 import { Category, Todo } from '@/typings';
 import React, { useState } from 'react'
-const postUrl = process.env.NEXT_PUBLIC_POST_URL as string;
+const basetodosUrl = process.env.NEXT_PUBLIC_BASE_TODOS_URL as string;
 
 type todo = {
   categories: Category[]
@@ -16,6 +16,8 @@ export const TodoRowNew = ({ categories, setAddNewMode, loadData}: todo ) => {
     completed: false,
     category: categories[0]
   })
+
+  const todosPostUrl = basetodosUrl + "todo"
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentContent({...currentContent, [e.target.name]: e.target.checked})
@@ -48,7 +50,7 @@ export const TodoRowNew = ({ categories, setAddNewMode, loadData}: todo ) => {
     };
 
     try {
-      const response = await fetch(postUrl, requestOptions);
+      const response = await fetch(todosPostUrl, requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');

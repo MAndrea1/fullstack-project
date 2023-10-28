@@ -3,9 +3,7 @@ import { useEffect, useState } from "react"
 import { TodoRow } from "./components/TodoRow";
 import { Category, Todo } from "@/typings";
 import { TodoRowNew } from "./components/TodoRowNew";
-const todosUrl = process.env.NEXT_PUBLIC_TODOS_URL as string;
-const todosByCat = process.env.NEXT_PUBLIC_TODOS_BY_CAT_URL as string;
-const todosCat = process.env.NEXT_PUBLIC_CAT_URL as string;
+const basetodosUrl = process.env.NEXT_PUBLIC_BASE_TODOS_URL as string;
 
 export default function Home() {
   const [ todos, setTodos ] = useState<Todo[]>([])
@@ -13,19 +11,23 @@ export default function Home() {
   const [ selectedCategory, setSelectedCategory ] = useState('No Filter');
   const [ addNewMode, setAddNewMode ] = useState(false);
 
+  const todosUrl = basetodosUrl + "todos"
+  const todosByCatUrl = basetodosUrl + "todos-by-cat?categoryId=" + selectedCategory
+  const todosCategoriesUrl = basetodosUrl + "categories"
+
   useEffect(() => {
     loadData()
     loadCategories()
   }, [selectedCategory])
 
   const loadData = async () => {
-    const requestedUrl = selectedCategory === "No Filter" ? todosUrl :  todosByCat + selectedCategory
+    const requestedUrl = selectedCategory === "No Filter" ? todosUrl :  todosByCatUrl
     const dataTodos = await fetch(requestedUrl).then((res) => res.json()).catch((err) => console.log(err.message))
     setTodos(dataTodos)
   }
 
   const loadCategories = async() => {  
-    const dataCategories = await fetch(todosCat).then((res) => res.json()).catch((err) => console.log(err.message))
+    const dataCategories = await fetch(todosCategoriesUrl).then((res) => res.json()).catch((err) => console.log(err.message))
     if (dataCategories?.length > 0) {
       setCategories(dataCategories)
     }
