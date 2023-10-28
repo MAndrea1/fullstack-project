@@ -3,7 +3,9 @@ import { useEffect, useState } from "react"
 import { TodoRow } from "./components/TodoRow";
 import { Category, Todo } from "@/typings";
 import { TodoRowNew } from "./components/TodoRowNew";
-const basetodosUrl = process.env.NEXT_PUBLIC_BASE_TODOS_URL as string;
+import { getEndpoint } from "@/config-endpoints";
+
+const { basetodosUrl } = getEndpoint();
 
 export default function Home() {
   const [ todos, setTodos ] = useState<Todo[]>([])
