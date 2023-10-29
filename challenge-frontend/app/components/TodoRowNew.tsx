@@ -66,20 +66,20 @@ export const TodoRowNew = ({ categories, setAddNewMode, loadData}: todo ) => {
   }
 
   return (
-    <tr className=' rounded-lg'>
+    <tr className='shadow-md bg-white'>
       <td>
         <input
             name="title"
             type="text"
-            className='bg-white p-2'
+            className='border p-2'
             value={currentContent.title}
             onChange={(e) => handleEdit(e)}/>
       </td>
-      <td>
+      <td className='md:flex'>
         <input
             name="content"
             type="text"
-            className='bg-white p-2'
+            className='border p-2 md:flex-1'
             value={currentContent.content}
             onChange={(e) => handleEdit(e)}/>
       </td>
@@ -106,8 +106,8 @@ export const TodoRowNew = ({ categories, setAddNewMode, loadData}: todo ) => {
       </td>
       <td className='w-fit'>
         <div className='flex flex-col space-y-1 md:flex-row md:space-y-0 md:space-x-1 w-fit'>
-          <button onClick={handleSave} className="btn btn-sm btn-outline btn-info">Save</button>
-          <button onClick={() => {setAddNewMode(false)}} className="btn btn-sm btn-outline btn-error">Discard</button>
+          <button onClick={handleSave} className="btn btn-sm btn-info">Save</button>
+          <button onClick={() => {setAddNewMode(false)}} className="btn btn-sm btn-error">Discard</button>
         </div>
       </td>
     </tr>

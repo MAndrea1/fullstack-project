@@ -1,6 +1,7 @@
 import { Category, Todo } from '@/typings';
 import React, { useState } from 'react'
 import { getEndpoint } from "@/config-endpoints";
+import { DeleteAlert } from './DeleteAlert';
 
 const { basetodosUrl } = getEndpoint();
 
@@ -13,6 +14,7 @@ export const TodoRow = ({todo, categories}: todo ) => {
   const [ currentContent, setCurrentContent ] = useState<Todo>(todo)
   const [ newContent, setNewContent ] = useState<Todo>(todo)
   const [ editMode, setEditMode ] = useState(false)
+  const [ toDelete, setToDelete ] = useState(false)
   const [ isDeleted, setIsDeleted ] = useState(false)
 
   const todosPutUrl = basetodosUrl + "todo/" + todo.id 
@@ -150,7 +152,10 @@ export const TodoRow = ({todo, categories}: todo ) => {
       <td className='w-fit'>
         <div className='flex flex-col space-y-1 md:flex-row md:space-y-0 md:space-x-1 w-fit'>
           <button onClick={() => setEditMode(true)} className="btn btn-sm btn-outline btn-info">Edit</button>
-          <button onClick={() => deleteUser(currentContent.id)} className="btn btn-sm btn-outline btn-error">Delete</button>
+          <button onClick={() => setToDelete(true)} className="btn btn-sm btn-outline btn-error">Delete</button>
+
+          {toDelete ? <DeleteAlert todo={todo} setIsDeleted={setIsDeleted} setToDelete={setToDelete}/> : ""}
+
         </div>
       </td>
       </>
