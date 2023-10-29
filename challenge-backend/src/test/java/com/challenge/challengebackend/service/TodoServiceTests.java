@@ -62,7 +62,7 @@ public class TodoServiceTests {
     }
 
     @Test
-    public void TodoService_getTodosByCategory_ReturnListOf2() {
+    public void TodoService_getTodosByCategory_IsNotNull() {
 
         long categoryId = 1L;
         String categoryName = "Cat1";
@@ -78,7 +78,6 @@ public class TodoServiceTests {
         List<Todo> listByCat = todoService.getTodosByCategory(categoryId);
 
         Assertions.assertThat(listByCat).isNotNull();
-        Assertions.assertThat(listByCat.size()).isEqualTo(2);
         Assertions.assertThat(listByCat).isEqualTo(listTodos);
     }
 
