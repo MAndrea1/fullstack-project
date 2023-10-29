@@ -62,12 +62,12 @@ public class TodoService {
                 .orElseThrow(() -> new CategoryNotFoundException(todoDTO.getCategoryId()));
 
         return todoRepository.findById(id)
-                .map(user-> {
-                    user.setTitle(todoDTO.getTitle());
-                    user.setContent(todoDTO.getContent());
-                    user.setCompleted(todoDTO.isCompleted());
-                    user.setCategory(category);
-                    return todoRepository.save(user);
+                .map(todo-> {
+                    todo.setTitle(todoDTO.getTitle());
+                    todo.setContent(todoDTO.getContent());
+                    todo.setCompleted(todoDTO.isCompleted());
+                    todo.setCategory(category);
+                    return todoRepository.save(todo);
                 }).orElseThrow(()->new TodoNotFoundException(id));
     }
 

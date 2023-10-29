@@ -1,7 +1,13 @@
 package com.challenge.challengebackend.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Todo {
 
