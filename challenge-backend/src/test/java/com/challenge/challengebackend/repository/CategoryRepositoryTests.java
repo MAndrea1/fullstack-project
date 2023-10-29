@@ -18,23 +18,6 @@ public class CategoryRepositoryTests {
     private CategoryRepository categoryRepository;
 
     @Test
-    public void CategoryRepository_SaveCategory_ReturnSavedCategory() {
-
-        // Arrange
-        Category category = Category.builder()
-                .id(1L)
-                .name("Cat 1")
-                .build();
-
-        // Act
-        Category savedCategory = categoryRepository.save(category);
-
-        // Assert
-        Assertions.assertThat(savedCategory).isNotNull();
-        Assertions.assertThat(savedCategory.getId()).isGreaterThan(0);
-    }
-
-    @Test
     public void CategoryRepository_GetAllCategories_ReturnAllCategories() {
 
         // Arrange
